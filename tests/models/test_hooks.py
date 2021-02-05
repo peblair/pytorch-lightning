@@ -144,7 +144,7 @@ def test_training_epoch_end_metrics_collection_on_override(tmpdir):
 
 
 @pytest.mark.skipif(not torch.cuda.is_available(), reason="test requires GPU machine")
-def test_prepare_batch_for_transfer():
+def test_apply_batch_transfer_handler():
     expected_device = torch.device('cuda', 0)
 
     class CustomBatch:

@@ -392,7 +392,7 @@ def test_full_loop_dp(tmpdir):
 
 
 @pytest.mark.skipif(not torch.cuda.is_available(), reason="test requires GPU machine")
-def test_dm_prepare_batch_for_transfer(tmpdir):
+def test_dm_apply_batch_transfer_handler(tmpdir):
     expected_device = torch.device('cuda', 0)
 
     class CustomBatch:

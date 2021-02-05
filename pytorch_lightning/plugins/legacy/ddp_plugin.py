@@ -129,7 +129,7 @@ class DDPPlugin(LightningPlugin):
         """
         if self.is_running_single_process_per_device:
             args = list(args)
-            args[0] = model._prepare_batch_for_transfer(args[0])
+            args[0] = model._apply_batch_transfer_handler(args[0])
 
         return tuple(args)
 
