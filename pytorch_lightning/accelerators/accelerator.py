@@ -328,7 +328,7 @@ class Accelerator(object):
 
     def connect_precision_plugin(self, plugin: PrecisionPlugin):
         """Attaches the precision plugin to the accelerator"""
-        model, optimizers, schedulers = plugin.connect(self.model, self.optimizers, self.lr_schedulers)
+        model, optimizers, schedulers = plugin.connect(self.model, self.optimizers, self.lr_schedulers, self.root_device)
         self.model = model
         self.optimizers = optimizers
         self.schedulers = schedulers

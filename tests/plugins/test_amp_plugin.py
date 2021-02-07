@@ -26,7 +26,7 @@ from pytorch_lightning.utilities.exceptions import MisconfigurationException
 @mock.patch('torch.cuda.device_count', return_value=2)
 @pytest.mark.parametrize(
     ['ddp_backend', 'gpus', 'num_processes'],
-    [('ddp_cpu', None, 2), ('ddp', 2, 0), ('ddp2', 2, 0), ('ddp_spawn', 2, 0)],
+    [('ddp', 2, 0), ('ddp2', 2, 0), ('ddp_spawn', 2, 0)],
 )
 def test_amp_choice_default_ddp_cpu(tmpdir, ddp_backend, gpus, num_processes):
 

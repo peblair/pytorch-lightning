@@ -135,9 +135,6 @@ class RPCSequentialPlugin(RPCPlugin):
         else:
             self.on_main_rpc_connection()
 
-    def on_before_manual_backward(self, model: LightningDistributedDataParallel, output: Any):
-        pass
-
     def _infer_model_balance(self):
         log.info(f'Inferring model balance using {self.balance_mode} mode')
         model = self.lightning_module
@@ -264,7 +261,7 @@ class RPCSequentialPlugin(RPCPlugin):
     def configure_ddp(self, model: LightningModule, device_ids: List[int]) -> DistributedDataParallel:
         ddp_plugin = RPCPlugin(process_group=mpu.get_data_parallel_group()).configure_ddp(model, device_ids)
         # Plugin handle backwards across processes. Currently not supported for DDP + pipe parallel
-        ddp_plugin.PREPARE_FOR_BACKWARDS = False
+        ddp_plugin.require_backward_grad_sync = False
         return ddp_plugin
 
     @rank_zero_only

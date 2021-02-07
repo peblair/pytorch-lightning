@@ -11,9 +11,10 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-from typing import List, Tuple
+from typing import List, Tuple, Sequence
 
 import torch
+from torch.nn import Module
 from torch.optim import Optimizer
 
 from pytorch_lightning.core import LightningModule
@@ -34,11 +35,13 @@ class ApexMixedPrecisionPlugin(MixedPrecisionPlugin):
     def master_params(self, optimizer: torch.optim.Optimizer):
         return amp.master_params(optimizer)
 
-    def connect(self, model: torch.nn.Module, optimizers, lr_schedulers):
+    def connect(self, model: Module, optimizers: Sequence,
+                lr_schedulers: Sequence,
+                device: torch.device) -> Tuple[Module, Sequence, Sequence]:
         """Connects the precision plugin to the training process,
         configures apex and reinits the schedulers
         """
-        model, optimizers = self.configure_apex(amp, model, optimizers, self.amp_level)
+        model, optimizers = self.configure_apex(amp, model, optimizers, self.amp_level, device)
         self.reinit_scheduler_properties(optimizers, lr_schedulers)
         return model, optimizers, lr_schedulers
 
@@ -96,6 +99,7 @@ class ApexMixedPrecisionPlugin(MixedPrecisionPlugin):
         model: LightningModule,
         optimizers: List[Optimizer],
         amp_level: str,
+        device: torch.device,
     ) -> Tuple[LightningModule, List[Optimizer]]:
         r"""
         Override to init AMP your own way.
@@ -121,7 +125,7 @@ class ApexMixedPrecisionPlugin(MixedPrecisionPlugin):
 
                     return model, optimizers
         """
-        model, optimizers = amp.initialize(model, optimizers, opt_level=amp_level)
+        model, optimizers = amp.initialize(model.to(device), optimizers, opt_level=amp_level)
         return model, optimizers
 
     @staticmethod
