@@ -86,6 +86,7 @@ def test_hooks_no_recursion_error(tmpdir):
     # hooks were appended in cascade every tine a new data module was instantiated leading to a recursion error.
     # See https://github.com/PyTorchLightning/pytorch-lightning/issues/3652
     class DummyDM(LightningDataModule):
+
         def setup(self, *args, **kwargs):
             pass
 
@@ -238,13 +239,16 @@ def test_train_val_loop_only(tmpdir):
 
 
 def test_dm_checkpoint_save(tmpdir):
+
     class CustomBoringModel(BoringModel):
+
         def validation_step(self, batch, batch_idx):
             out = super().validation_step(batch, batch_idx)
             self.log('early_stop_on', out['x'])
             return out
 
     class CustomBoringDataModule(BoringDataModule):
+
         def on_save_checkpoint(self, checkpoint: Dict[str, Any]) -> None:
             checkpoint[self.__class__.__name__] = self.__class__.__name__
 
@@ -396,6 +400,7 @@ def test_dm_apply_batch_transfer_handler(tmpdir):
     expected_device = torch.device('cuda', 0)
 
     class CustomBatch:
+
         def __init__(self, data):
             self.samples = data[0]
             self.targets = data[1]
@@ -453,7 +458,9 @@ def test_dm_apply_batch_transfer_handler(tmpdir):
 def test_dm_reload_dataloaders_every_epoch(tmpdir):
     """Test datamodule, where trainer argument
     reload_dataloaders_every_epoch is set to True/False"""
+
     class CustomBoringDataModule(BoringDataModule):
+
         def __init__(self):
             super().__init__()
             self._epochs_called_for = []

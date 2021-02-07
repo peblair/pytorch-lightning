@@ -18,8 +18,7 @@ from unittest.mock import MagicMock
 import pytest
 import torch
 
-
-from pytorch_lightning import Trainer, Callback
+from pytorch_lightning import Callback, Trainer
 from pytorch_lightning.accelerators.legacy.gpu_accelerator import GPUAccelerator
 from pytorch_lightning.trainer.states import TrainerState
 from tests.base import BoringModel, EvalModelTemplate, RandomDataset
@@ -196,8 +195,9 @@ def test_apply_batch_transfer_handler():
 
 
 @pytest.mark.skipif(torch.cuda.device_count() < 2, reason="test requires multi-GPU machine")
-@pytest.mark.skipif(not os.getenv("PL_RUNNING_SPECIAL_TESTS", '0') == '1',
-                    reason="test should be run outside of pytest")
+@pytest.mark.skipif(
+    not os.getenv("PL_RUNNING_SPECIAL_TESTS", '0') == '1', reason="test should be run outside of pytest"
+)
 def test_transfer_batch_hook_ddp(tmpdir):
     """
     Test custom data are properly moved to the right device using ddp
@@ -216,6 +216,7 @@ def test_transfer_batch_hook_ddp(tmpdir):
         return CustomBatch(batch)
 
     class TestModel(BoringModel):
+
         def training_step(self, batch, batch_idx):
             assert batch.samples.device == self.device
             assert isinstance(batch_idx, int)
@@ -238,12 +239,11 @@ def test_transfer_batch_hook_ddp(tmpdir):
     trainer.fit(model)
 
 
-@pytest.mark.parametrize(
-    'max_epochs,batch_idx_',
-    [(2, 5), (3, 8), (4, 12)]
-)
+@pytest.mark.parametrize('max_epochs,batch_idx_', [(2, 5), (3, 8), (4, 12)])
 def test_on_train_batch_start_hook(max_epochs, batch_idx_):
+
     class CurrentModel(EvalModelTemplate):
+
         def on_train_batch_start(self, batch, batch_idx, dataloader_idx):
             if batch_idx == batch_idx_:
                 return -1
@@ -263,6 +263,7 @@ def test_trainer_model_hook_system(tmpdir):
     """Test the hooks system."""
 
     class HookedModel(BoringModel):
+
         def __init__(self):
             super().__init__()
             self.called = []
