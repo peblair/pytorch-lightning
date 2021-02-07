@@ -192,6 +192,8 @@ class DDPPlugin(ParallelPlugin):
 
         self.pre_configure_ddp()
 
+        print(self.model)
+
         self._model = DistributedDataParallel(
             LightningDistributedModule(self.model),
             device_ids=self.determine_ddp_device_ids(),
