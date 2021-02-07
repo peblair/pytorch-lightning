@@ -13,7 +13,7 @@
 # limitations under the License.
 
 import os
-from typing import Optional, Sequence
+from typing import Optional, Sequence, Union
 
 import torch
 
@@ -103,8 +103,6 @@ class BackendConnector(object):
         self._training_type_plugin: Optional[TrainingTypePlugin] = None
         self._cluster_environment: Optional[ClusterEnvironment] = None
 
-        self.handle_given_plugins(plugins)
-
         # init the default rank if exists
         # we need to call this here or NVIDIA flags and other messaging in init will show on all ranks
         # this way we only show it on rank 0
@@ -117,6 +115,8 @@ class BackendConnector(object):
 
         self.parallel_device_ids = device_parser.parse_gpu_ids(self.gpus)
         self.root_gpu = device_parser.determine_root_gpu_device(self.parallel_device_ids)
+
+        self.handle_given_plugins(plugins)
 
         self.set_distributed_mode()
         self.configure_slurm_ddp()
@@ -157,28 +157,28 @@ class BackendConnector(object):
         precision = None
         cluster_environment = None
 
-        for plug in plugins:
-            if isinstance(plug, TrainingTypePlugin):
+        for plugin in plugins:
+            if isinstance(plugin, TrainingTypePlugin):
                 if training_type is None:
-                    training_type = plug
+                    training_type = plugin
 
                 else:
                     raise MisconfigurationException(
                         'You can only specify one precision and one training type plugin. '
                         'Found more than 1 training type plugin'
                     )
-            elif isinstance(plug, PrecisionPlugin):
+            elif isinstance(plugin, PrecisionPlugin):
                 if precision is None:
-                    precision = plug
+                    precision = plugin
                 else:
                     raise MisconfigurationException(
                         'You can only specify one precision and one training type plugin. '
                         'Found more than 1 precision plugin'
                     )
 
-            elif isinstance(plug, ClusterEnvironment):
+            elif isinstance(plugin, ClusterEnvironment):
                 if cluster_environment is None:
-                    cluster_environment = plug
+                    cluster_environment = plugin
                 else:
                     raise MisconfigurationException(
                         'You can only specify one cluster environment '
@@ -186,11 +186,11 @@ class BackendConnector(object):
                     )
             else:
                 raise MisconfigurationException(
-                    f'Found invalid type for plugin {plug}. '
+                    f'Found invalid type for plugin {plugin}. '
                     'Expected a precision or training type plugin.'
                 )
 
-        self._training_type_plugin = training_type
+        self.set_training_type(training_type)
         self._precision_plugin = precision
         self._cluster_environment = cluster_environment or self.select_cluster_environment()
 
@@ -199,6 +199,10 @@ class BackendConnector(object):
         if self._precision_plugin is None:
             self._precision_plugin = self.select_precision_plugin()
         return self._precision_plugin
+        
+    def set_training_type(self, training_type: Union[TrainingTypePlugin, None]):
+        self._training_type_plugin = training_type
+        self._training_type_plugin = self.training_type_plugin
 
     @property
     def training_type_plugin(self) -> TrainingTypePlugin:
