@@ -26,6 +26,7 @@ from pytorch_lightning.trainer.states import TrainerState
 from pytorch_lightning.utilities import _TPU_AVAILABLE
 from pytorch_lightning.utilities.exceptions import MisconfigurationException
 from tests.base import EvalModelTemplate
+from tests.helpers import BoringModel
 from tests.helpers.datasets import TrialMNIST
 from tests.helpers.utils import pl_multi_process_test
 
@@ -55,7 +56,7 @@ def test_model_tpu_cores_1(tmpdir):
         limit_val_batches=0.4,
     )
 
-    model = EvalModelTemplate()
+    model = BoringModel()
     tpipes.run_model_test(trainer_options, model, on_gpu=False, with_hpc=False)
 
 
@@ -73,7 +74,7 @@ def test_model_tpu_index(tmpdir, tpu_core):
         limit_val_batches=0.4,
     )
 
-    model = EvalModelTemplate()
+    model = BoringModel()
     tpipes.run_model_test(trainer_options, model, on_gpu=False, with_hpc=False)
     assert torch_xla._XLAC._xla_get_default_device() == f'xla:{tpu_core}'
 
@@ -113,7 +114,7 @@ def test_model_16bit_tpu_cores_1(tmpdir):
         limit_val_batches=0.4,
     )
 
-    model = EvalModelTemplate()
+    model = BoringModel()
     tpipes.run_model_test(trainer_options, model, on_gpu=False)
     assert os.environ.get('XLA_USE_BF16') == str(1), "XLA_USE_BF16 was not set in environment variables"
 
@@ -133,7 +134,7 @@ def test_model_16bit_tpu_index(tmpdir, tpu_core):
         limit_val_batches=0.2,
     )
 
-    model = EvalModelTemplate()
+    model = BoringModel()
     tpipes.run_model_test(trainer_options, model, on_gpu=False)
     assert torch_xla._XLAC._xla_get_default_device() == f'xla:{tpu_core}'
     assert os.environ.get('XLA_USE_BF16') == str(1), "XLA_USE_BF16 was not set in environment variables"
@@ -192,7 +193,7 @@ def test_tpu_grad_norm(tmpdir):
         gradient_clip_val=0.1,
     )
 
-    model = EvalModelTemplate()
+    model = BoringModel()
     tpipes.run_model_test(trainer_options, model, on_gpu=False, with_hpc=False)
 
 
@@ -200,11 +201,17 @@ def test_tpu_grad_norm(tmpdir):
 @pl_multi_process_test
 def test_dataloaders_passed_to_fit(tmpdir):
     """Test if dataloaders passed to trainer works on TPU"""
-
-    model = EvalModelTemplate()
-
-    trainer = Trainer(default_root_dir=tmpdir, max_epochs=1, tpu_cores=8)
-    trainer.fit(model, train_dataloader=model.train_dataloader(), val_dataloaders=model.val_dataloader())
+    model = BoringModel()
+    trainer = Trainer(
+        default_root_dir=tmpdir,
+        max_epochs=1,
+        tpu_cores=8,
+    )
+    trainer.fit(
+        model,
+        train_dataloader=model.train_dataloader(),
+        val_dataloaders=model.val_dataloader(),
+    )
     assert trainer.state == TrainerState.FINISHED, f"Training failed with {trainer.state}"
 
 

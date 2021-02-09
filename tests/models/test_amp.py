@@ -25,6 +25,7 @@ from pytorch_lightning.trainer.states import TrainerState
 from pytorch_lightning.utilities import _APEX_AVAILABLE
 from pytorch_lightning.utilities.exceptions import MisconfigurationException
 from tests.base import EvalModelTemplate
+from tests.helpers import BoringModel
 
 
 @pytest.mark.skip(reason='dp + amp not supported currently')  # TODO
@@ -156,7 +157,7 @@ def test_cpu_model_with_amp(tmpdir):
         precision=16,
     )
 
-    model = EvalModelTemplate()
+    model = BoringModel()
 
     with pytest.raises((MisconfigurationException, ModuleNotFoundError)):
         tpipes.run_model_test(trainer_options, model, on_gpu=False)
