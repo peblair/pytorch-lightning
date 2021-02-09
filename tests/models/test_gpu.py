@@ -25,6 +25,7 @@ from pytorch_lightning.accelerators.legacy.gpu_accelerator import GPUAccelerator
 from pytorch_lightning.utilities import device_parser
 from pytorch_lightning.utilities.exceptions import MisconfigurationException
 from tests.helpers import BoringModel
+from tests.helpers.simple_models import ClassificationModel
 
 PRETEND_N_OF_GPUS = 16
 
@@ -42,8 +43,8 @@ def test_multi_gpu_none_backend(tmpdir):
         gpus=2,
     )
 
-    model = BoringModel()
-    tpipes.run_model_test(trainer_options, model, min_acc=0.20)
+    model = ClassificationModel()
+    tpipes.run_model_test(trainer_options, model)
 
 
 @pytest.mark.skipif(torch.cuda.device_count() < 2, reason="test requires multi-GPU machine")

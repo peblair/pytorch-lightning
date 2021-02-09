@@ -200,7 +200,7 @@ def test_running_test_pretrained_model_distrib_dp(tmpdir):
         dataloaders = [dataloaders]
 
     for dataloader in dataloaders:
-        tpipes.run_prediction(pretrained_model, dataloader)
+        tpipes.run_prediction_eval_model_template(pretrained_model, dataloader)
 
 
 @pytest.mark.skipif(torch.cuda.device_count() < 2, reason="test requires multi-GPU machine")
@@ -251,7 +251,7 @@ def test_running_test_pretrained_model_distrib_ddp_spawn(tmpdir):
         dataloaders = [dataloaders]
 
     for dataloader in dataloaders:
-        tpipes.run_prediction(pretrained_model, dataloader)
+        tpipes.run_prediction_eval_model_template(pretrained_model, dataloader)
 
 
 def test_running_test_pretrained_model_cpu(tmpdir):
@@ -394,7 +394,7 @@ def test_dp_resume(tmpdir):
         dp_model.module.module.running_stage = RunningStage.EVALUATING
 
         dataloader = trainer.train_dataloader
-        tpipes.run_prediction(dp_model, dataloader, dp=True)
+        tpipes.run_prediction_eval_model_template(dp_model, dataloader, dp=True)
 
     # new model
     model = EvalModelTemplate(**hparams)

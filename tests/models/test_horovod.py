@@ -33,6 +33,8 @@ from pytorch_lightning.utilities import _APEX_AVAILABLE, _HOROVOD_AVAILABLE, _NA
 from tests.base import EvalModelTemplate
 from tests.helpers.advanced_models import BasicGAN
 from tests.helpers.boring_model import BoringModel
+from tests.helpers.datamodules import ClassifDataModule
+from tests.helpers.simple_models import ClassificationModel
 
 if _HOROVOD_AVAILABLE:
     import horovod
@@ -173,7 +175,7 @@ def test_horovod_amp(tmpdir):
 @pytest.mark.skipif(not torch.cuda.is_available(), reason="test requires GPU machine")
 def test_horovod_transfer_batch_to_gpu(tmpdir):
 
-    class TestTrainingStepModel(EvalModelTemplate):
+    class TestTrainingStepModel(ClassificationModel):
 
         def training_step(self, batch, *args, **kwargs):
             x, y = batch
@@ -200,7 +202,9 @@ def test_horovod_transfer_batch_to_gpu(tmpdir):
         deterministic=True,
         accelerator='horovod',
     )
-    tpipes.run_model_test_without_loggers(trainer_options, model)
+
+    dm = ClassifDataModule()
+    tpipes.run_model_test_without_loggers(trainer_options, model, dm, min_acc=0.25)
 
 
 @pytest.mark.skipif(platform.system() == "Windows", reason="Horovod is not supported on Windows")
