@@ -21,11 +21,11 @@ import torch.distributed as dist
 import torch.multiprocessing as mp
 from torch.utils.data import DataLoader
 
-import tests.base.develop_utils as tutils
+import tests.helpers.utils as tutils
 from pytorch_lightning import Trainer
 from pytorch_lightning.core.step_result import Result
 from pytorch_lightning.trainer.states import TrainerState
-from tests.base import BoringDataModule, BoringModel
+from tests.helpers import BoringDataModule, BoringModel
 
 
 def _setup_ddp(rank, worldsize):

@@ -23,8 +23,8 @@ from pytorch_lightning import LightningDataModule, Trainer
 from pytorch_lightning.accelerators.legacy.gpu_accelerator import GPUAccelerator
 from pytorch_lightning.callbacks import ModelCheckpoint
 from pytorch_lightning.trainer.states import TrainerState
-from tests.base import BoringDataModule, BoringModel
-from tests.base.develop_utils import reset_seed
+from tests.helpers import BoringDataModule, BoringModel
+from tests.helpers.utils import reset_seed
 
 
 def test_can_prepare_data(tmpdir):
