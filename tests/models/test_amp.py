@@ -23,8 +23,8 @@ import tests.helpers.utils as tutils
 from pytorch_lightning import Trainer
 from pytorch_lightning.trainer.states import TrainerState
 from pytorch_lightning.utilities.exceptions import MisconfigurationException
-from tests import _SKIPIF_NO_APEX, _SKIPIF_NO_GPU, _SKIPIF_NO_GPUS
 from tests.base import EvalModelTemplate
+from tests.helpers import _SKIPIF_NO_APEX, _SKIPIF_NO_GPU, _SKIPIF_NO_GPUS
 
 
 @pytest.mark.skip(reason='dp + amp not supported currently')  # TODO

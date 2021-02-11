@@ -22,8 +22,8 @@ import tests.helpers.utils as tutils
 from pytorch_lightning import Trainer
 from pytorch_lightning.utilities import AMPType
 from pytorch_lightning.utilities.exceptions import MisconfigurationException
-from tests import _SKIPIF_NO_AMP, _SKIPIF_NO_GPU
 from tests.base import EvalModelTemplate
+from tests.helpers import _SKIPIF_NO_AMP, _SKIPIF_NO_GPU
 from tests.helpers.datamodules import MNISTDataModule
 
 

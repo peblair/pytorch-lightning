@@ -38,9 +38,8 @@ from pytorch_lightning.trainer.logging import TrainerLoggingMixin
 from pytorch_lightning.trainer.states import TrainerState
 from pytorch_lightning.utilities.cloud_io import load as pl_load
 from pytorch_lightning.utilities.exceptions import MisconfigurationException
-from tests import _SKIPIF_NO_AMP, _SKIPIF_NO_GPU, _SKIPIF_NO_GPUS
 from tests.base import EvalModelTemplate
-from tests.helpers import BoringModel, RandomDataset
+from tests.helpers import _SKIPIF_NO_AMP, _SKIPIF_NO_GPU, _SKIPIF_NO_GPUS, BoringModel, RandomDataset
 
 
 @pytest.fixture

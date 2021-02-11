@@ -7,7 +7,7 @@ import torch
 from pytorch_lightning import Trainer
 from pytorch_lightning.callbacks import Callback
 from pytorch_lightning.plugins.legacy.native_amp import NativeAMPPlugin
-from tests import _SKIPIF_NO_AMP, _SKIPIF_NO_GPUS
+from tests.helpers import _SKIPIF_NO_AMP, _SKIPIF_NO_GPUS
 from tests.helpers.boring_model import BoringModel
 
 

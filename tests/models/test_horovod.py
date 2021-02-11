@@ -30,8 +30,8 @@ from pytorch_lightning.accelerators.legacy.horovod_accelerator import HorovodAcc
 from pytorch_lightning.metrics.classification.accuracy import Accuracy
 from pytorch_lightning.trainer.states import TrainerState
 from pytorch_lightning.utilities import _HOROVOD_AVAILABLE
-from tests import _SKIPIF_NO_AMP, _SKIPIF_NO_APEX, _SKIPIF_NO_GPU, _SKIPIF_NO_GPUS
 from tests.base import EvalModelTemplate
+from tests.helpers import _SKIPIF_NO_AMP, _SKIPIF_NO_APEX, _SKIPIF_NO_GPU, _SKIPIF_NO_GPUS
 from tests.helpers.advanced_models import BasicGAN
 from tests.helpers.boring_model import BoringModel
 

@@ -22,7 +22,7 @@ import torch.distributed as torch_distrib
 import torch.nn.functional as F
 
 from pytorch_lightning import seed_everything, Trainer
-from tests import _SKIPIF_NO_APEX, _SKIPIF_NO_GPU, _SKIPIF_NO_GPUS
+from tests.helpers import _SKIPIF_NO_APEX, _SKIPIF_NO_GPU, _SKIPIF_NO_GPUS
 from tests.helpers.boring_model import BoringModel
 
 
