@@ -22,10 +22,8 @@ class SkipIf(dict):
     >>> si3 = SkipIf(condition=True, reason="skip-if-3")
     >>> pprint(si1 & si2)
     {'condition': False, 'reason': 'skip-if-1 AND skip-if-2'}
-    >>> pprint(si1 + si3)
-    {'condition': True, 'reason': 'skip-if-1 AND skip-if-3'}
     >>> pprint(si2 | si3)
-    {'condition': True, 'reason': 'skip-if-2 OR skip-if-3'}
+    {'condition': True, 'reason': 'skip-if-1 OR skip-if-3'}
     >>> pprint(~si3)
     {'condition': False, 'reason': 'NOT skip-if-3'}
     >>> pprint(si1 and si2)
@@ -39,12 +37,6 @@ class SkipIf(dict):
 
     def __or__(self, other: dict) -> dict:
         return SkipIf(condition=self['condition'] or other['condition'], reason=' OR '.join([self['reason'], other['reason']]))
-
-    def __rand__(self, other: dict) -> dict:
-        return self & other
-
-    def __add__(self, other: dict) -> dict:
-        return self & other
 
     def __inv__(self) -> dict:
         return SkipIf(condition=not self['condition'], reason='NOT ' + self['reason'])

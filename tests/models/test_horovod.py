@@ -124,7 +124,7 @@ def test_horovod_multi_gpu(tmpdir):
 @pytest.mark.skip(reason="Horovod has a problem with broadcast when using apex?")
 @pytest.mark.skipif(platform.system() == "Windows", reason="Horovod is not supported on Windows")
 @pytest.mark.skipif(not _HOROVOD_NCCL_AVAILABLE, reason="test requires Horovod with NCCL support")
-@pytest.mark.skipif(**(_SKIPIF_NO_GPUS + _SKIPIF_NO_APEX))
+@pytest.mark.skipif(**(_SKIPIF_NO_GPUS | _SKIPIF_NO_APEX))
 def test_horovod_apex(tmpdir):
     """Test Horovod with multi-GPU support using apex amp."""
     trainer_options = dict(
@@ -147,7 +147,7 @@ def test_horovod_apex(tmpdir):
 @pytest.mark.skip(reason="Skip till Horovod fixes integration with Native torch.cuda.amp")
 @pytest.mark.skipif(platform.system() == "Windows", reason="Horovod is not supported on Windows")
 @pytest.mark.skipif(not _HOROVOD_NCCL_AVAILABLE, reason="test requires Horovod with NCCL support")
-@pytest.mark.skipif(**(_SKIPIF_NO_GPUS + _SKIPIF_NO_AMP))
+@pytest.mark.skipif(**(_SKIPIF_NO_GPUS | _SKIPIF_NO_AMP))
 def test_horovod_amp(tmpdir):
     """Test Horovod with multi-GPU support using native amp."""
     trainer_options = dict(

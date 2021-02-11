@@ -290,7 +290,7 @@ def test_empty_model_size(mode):
     assert 0.0 == summary.model_size
 
 
-@pytest.mark.skipif(**(_SKIPIF_NO_GPU + _SKIPIF_NO_AMP))
+@pytest.mark.skipif(**(_SKIPIF_NO_GPU | _SKIPIF_NO_AMP))
 @pytest.mark.parametrize('precision', [16, 32])
 def test_model_size_precision(monkeypatch, tmpdir, precision):
     """ Test model size for half and full precision. """

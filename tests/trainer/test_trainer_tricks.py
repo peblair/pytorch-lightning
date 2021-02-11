@@ -335,7 +335,7 @@ def test_error_on_dataloader_passed_to_fit(tmpdir):
         trainer.tune(model, **fit_options)
 
 
-@pytest.mark.skipif(**(_SKIPIF_NO_GPU + _SKIPIF_NO_AMP))
+@pytest.mark.skipif(**(_SKIPIF_NO_GPU | _SKIPIF_NO_AMP))
 def test_auto_scale_batch_size_with_amp(tmpdir):
     model = EvalModelTemplate()
     batch_size_before = model.batch_size

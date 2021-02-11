@@ -990,7 +990,7 @@ def test_gradient_clipping(tmpdir):
     trainer.fit(model)
 
 
-@pytest.mark.skipif(**(_SKIPIF_NO_GPU + _SKIPIF_NO_AMP))
+@pytest.mark.skipif(**(_SKIPIF_NO_GPU | _SKIPIF_NO_AMP))
 def test_gradient_clipping_fp16(tmpdir):
     """
     Test gradient clipping with fp16

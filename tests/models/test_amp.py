@@ -185,7 +185,7 @@ def test_amp_without_apex(tmpdir):
 
 
 @mock.patch.dict(os.environ, {"PL_DEV_DEBUG": "1"})
-@pytest.mark.skipif(**(_SKIPIF_NO_GPU + _SKIPIF_NO_APEX))
+@pytest.mark.skipif(**(_SKIPIF_NO_GPU | _SKIPIF_NO_APEX))
 def test_amp_with_apex(tmpdir):
     """Check calling apex scaling in training."""
 
