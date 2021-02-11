@@ -26,6 +26,7 @@ import tests.helpers.utils as tutils
 from pytorch_lightning import Callback, Trainer
 from pytorch_lightning.callbacks import ModelCheckpoint
 from pytorch_lightning.trainer.states import RunningStage, TrainerState
+from tests import _SKIPIF_ARGS_NO_GPUS
 from tests.base import EvalModelTemplate, GenericEvalModelTemplate
 from tests.helpers import BoringModel
 
@@ -152,7 +153,7 @@ def test_callbacks_references_resume_from_checkpoint(tmpdir):
     trainer.fit(model)
 
 
-@pytest.mark.skipif(torch.cuda.device_count() < 2, reason="test requires multi-GPU machine")
+@pytest.mark.skipif(**_SKIPIF_ARGS_NO_GPUS)
 def test_running_test_pretrained_model_distrib_dp(tmpdir):
     """Verify `test()` on pretrained model."""
 
@@ -203,7 +204,7 @@ def test_running_test_pretrained_model_distrib_dp(tmpdir):
         tpipes.run_prediction(pretrained_model, dataloader)
 
 
-@pytest.mark.skipif(torch.cuda.device_count() < 2, reason="test requires multi-GPU machine")
+@pytest.mark.skipif(**_SKIPIF_ARGS_NO_GPUS)
 def test_running_test_pretrained_model_distrib_ddp_spawn(tmpdir):
     """Verify `test()` on pretrained model."""
     tutils.set_random_master_port()
@@ -338,7 +339,7 @@ def test_load_model_from_checkpoint(tmpdir, model_template):
     tutils.assert_ok_model_acc(new_trainer)
 
 
-@pytest.mark.skipif(torch.cuda.device_count() < 2, reason="test requires multi-GPU machine")
+@pytest.mark.skipif(**_SKIPIF_ARGS_NO_GPUS)
 def test_dp_resume(tmpdir):
     """Make sure DP continues training correctly."""
     hparams = EvalModelTemplate.get_default_hparams()
