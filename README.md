@@ -113,6 +113,9 @@ conda install pytorch-lightning -c conda-forge
 ```
 
 <!-- following section will be skipped from PyPI description -->
+<!-- end skipping PyPI description -->
+
+<!--
 
 #### Install bleeding-edge - future 1.2
 
@@ -133,7 +136,7 @@ or nightly from testing PyPI
 pip install -iU https://test.pypi.org/simple/ pytorch-lightning
 ```
 
-<!-- end skipping PyPI description -->
+-->
 
 ### Step 1: Add these imports
 
